@@ -1,3 +1,5 @@
+(function ($) {
+  "use strict";
 /** mycarousel*/
 
 window.onload = function () {
@@ -161,3 +163,4 @@ if (backtotop) {
   window.addEventListener("load", toggleBacktotop);
   onscroll(document, toggleBacktotop);
 }
+})()
