@@ -1,32 +1,19 @@
-(function ($) {
+(function () {
   "use strict";
-/** mycarousel*/
+  /** mycarousel*/
 
-window.onload = function () {
-  let carouselitem = document.getElementById("carousel-item");
+  window.onload = function () {
+    let carouselitem = document.getElementById("carousel-item");
 
-  let next = document.getElementById("next");
+    let next = document.getElementById("next");
 
-  let prev = document.getElementById("prev");
+    let prev = document.getElementById("prev");
 
-  // Initialize the width of the image and the position of the first image
+    // Initialize the width of the image and the position of the first image
 
-  let imgWidth = document.body.clientWidth;
+    let imgWidth = document.body.clientWidth;
 
-  let img = document.getElementsByClassName("img");
-
-  for (let i = 0; i < img.length; i++) {
-    img[i].style.width = imgWidth + "px";
-  }
-
-  carouselitem.style.left = -imgWidth + "px";
-
-  carouselitem.style.height = img[0].height + "px";
-
-  window.onresize = function () {
-    // Listen to browser window size in real time
-
-    imgWidth = document.body.clientWidth;
+    let img = document.getElementsByClassName("img");
 
     for (let i = 0; i < img.length; i++) {
       img[i].style.width = imgWidth + "px";
@@ -34,133 +21,150 @@ window.onload = function () {
 
     carouselitem.style.left = -imgWidth + "px";
 
-    //Set image container size in real time based on viewport
-
     carouselitem.style.height = img[0].height + "px";
 
-    mycarousel.style.height = img[0].height + "px";
-  };
+    window.onresize = function () {
+      // Listen to browser window size in real time
 
-  function animate(offset) {
-    // The obtained style.left is a string
+      imgWidth = document.body.clientWidth;
 
-    let newLeft = parseFloat(carouselitem.style.left) + offset;
+      for (let i = 0; i < img.length; i++) {
+        img[i].style.width = imgWidth + "px";
+      }
 
-    if (newLeft < -imgWidth * 5) {
       carouselitem.style.left = -imgWidth + "px";
-    } else if (newLeft > -imgWidth) {
-      carouselitem.style.left = -imgWidth * 5 + "px";
-    } else {
-      carouselitem.style.left = newLeft + "px";
-    }
-  }
 
-  // Setting the image to scroll in a loop
+      //Set image container size in real time based on viewport
 
-  let timer;
+      carouselitem.style.height = img[0].height + "px";
 
-  function play() {
-    timer = setInterval(function () {
-      next.onclick();
-    }, 2000);
-  }
+      mycarousel.style.height = img[0].height + "px";
+    };
 
-  play();
+    function animate(offset) {
+      // The obtained style.left is a string
 
-  // Image stops scrolling when mouse is over it
+      let newLeft = parseFloat(carouselitem.style.left) + offset;
 
-  let mycarousel = document.getElementById("mycarousel");
-
-  mycarousel.style.height = img[0].height + "px";
-
-  function stop() {
-    clearInterval(timer);
-  }
-
-  mycarousel.onmouseover = stop;
-
-  mycarousel.onmouseout = play;
-
-  // Adding a row of dots to a rotating image
-
-  let buttons = document.getElementById("buttons").getElementsByTagName("span");
-
-  let index = 1;
-
-  function buttonsShow() {
-    for (let i = 0; i < buttons.length; i++) {
-      if (buttons[i].className === "on") {
-        buttons[i].className = "";
+      if (newLeft < -imgWidth * 5) {
+        carouselitem.style.left = -imgWidth + "px";
+      } else if (newLeft > -imgWidth) {
+        carouselitem.style.left = -imgWidth * 5 + "px";
+      } else {
+        carouselitem.style.left = newLeft + "px";
       }
     }
 
-    buttons[index - 1].className = "on";
-  }
+    // Setting the image to scroll in a loop
 
-  prev.onclick = function () {
-    index -= 1;
+    let timer;
 
-    if (index < 1) {
-      index = 5;
+    function play() {
+      timer = setInterval(function () {
+        next.onclick();
+      }, 2000);
     }
 
-    buttonsShow();
+    play();
 
-    animate(imgWidth);
-  };
+    // Image stops scrolling when mouse is over it
 
-  next.onclick = function () {
-    index += 1;
+    let mycarousel = document.getElementById("mycarousel");
 
-    if (index > 5) {
-      index = 1;
+    mycarousel.style.height = img[0].height + "px";
+
+    function stop() {
+      clearInterval(timer);
     }
 
-    buttonsShow();
+    mycarousel.onmouseover = stop;
 
-    animate(-imgWidth);
-  };
+    mycarousel.onmouseout = play;
 
-  for (let i = 0; i < buttons.length; i++) {
-    buttons[i].onclick = function () {
-      let clickIndex = parseInt(this.getAttribute("index"));
+    // Adding a row of dots to a rotating image
 
-      let offset = imgWidth * (index - clickIndex);
+    let buttons = document
+      .getElementById("buttons")
+      .getElementsByTagName("span");
 
-      animate(offset);
+    let index = 1;
 
-      index = clickIndex;
+    function buttonsShow() {
+      for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i].className === "on") {
+          buttons[i].className = "";
+        }
+      }
+
+      buttons[index - 1].className = "on";
+    }
+
+    prev.onclick = function () {
+      index -= 1;
+
+      if (index < 1) {
+        index = 5;
+      }
 
       buttonsShow();
+
+      animate(imgWidth);
     };
-  }
-};
-/**
- * Animation on scroll
- */
-window.addEventListener("load", () => {
-  AOS.init({
-    duration: 1000,
-    easing: "ease-in-out",
-    once: true,
-    mirror: false,
-  });
-});
 
-/**
- * Back to top
- */
+    next.onclick = function () {
+      index += 1;
 
-let backtotop = select(".back-to-top");
-if (backtotop) {
-  const toggleBacktotop = () => {
-    if (window.scrollY > 100) {
-      backtotop.classList.add("active");
-    } else {
-      backtotop.classList.remove("active");
+      if (index > 5) {
+        index = 1;
+      }
+
+      buttonsShow();
+
+      animate(-imgWidth);
+    };
+
+    for (let i = 0; i < buttons.length; i++) {
+      buttons[i].onclick = function () {
+        let clickIndex = parseInt(this.getAttribute("index"));
+
+        let offset = imgWidth * (index - clickIndex);
+
+        animate(offset);
+
+        index = clickIndex;
+
+        buttonsShow();
+      };
     }
   };
-  window.addEventListener("load", toggleBacktotop);
-  onscroll(document, toggleBacktotop);
-}
-})()
+ 
+
+  /**
+   * Back to top
+   */
+
+  let backtotop = select(".back-to-top");
+  if (backtotop) {
+    const toggleBacktotop = () => {
+      if (window.scrollY > 100) {
+        backtotop.classList.add("active");
+      } else {
+        backtotop.classList.remove("active");
+      }
+    };
+    window.addEventListener("load", toggleBacktotop);
+    onscroll(document, toggleBacktotop);
+  }
+
+   /**
+   * Animation on scroll
+   */
+   window.addEventListener("load", () => {
+    AOS.init({
+      duration: 1000,
+      easing: "ease-in-out",
+      once: true,
+      mirror: false,
+    });
+  });
+})();
